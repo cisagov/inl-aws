@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Team INL Terraform Backend
+Resources:
+    TerraformBackend:
+        Type: AWS::S3::Bucket
+        Properties:
+            AccessControl: Private
+            BucketEncryption:
+                ServerSideEncryptionConfiguration:
+                    - ServerSideEncryptionByDefault:
+                        SSEAlgorithm: AES256
+            BucketName: inl-tf-backend
+    TerraformLock:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: inl-tf-lock
+            BillingMode: PAY_PER_REQUEST
+            
+            KeySchema:
+                - AttributeName: "LockID"
+                  KeyType: HASH
+
+            AttributeDefinitions:
+                - AttributeName: "LockID"
+                  AttributeType: "S"
