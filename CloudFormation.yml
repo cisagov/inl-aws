@@ -23,3 +23,12 @@ Resources:
             AttributeDefinitions:
                 - AttributeName: "LockID"
                   AttributeType: "S"
+    TerraformVars:
+        Type: AWS::S3::Bucket
+        Properties:
+            AccessControl: Private
+            BucketEncryption:
+                ServerSideEncryptionConfiguration:
+                    - ServerSideEncryptionByDefault:
+                        SSEAlgorithm: AES256
+            BucketName: inl-tfvars

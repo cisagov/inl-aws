@@ -1,0 +1,1 @@
+aws cloudformation update-stack --stack-name inl-tf --template-body file://CloudFormation.yml
