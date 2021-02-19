@@ -4,19 +4,18 @@
 #=================================================
 
 module "vpc" {
-  source     = "git::https://github.com/cloudposse/terraform-aws-vpc?ref=tags/0.14.0"
+  source     = "git::https://github.com/cloudposse/terraform-aws-vpc"
   namespace  = "${var.app}"
   name       = "vpc"
   cidr_block = "10.0.0.0/16"
 }
-
 locals {
   public_cidr_block  = cidrsubnet(module.vpc.vpc_cidr_block, 1, 0)
   private_cidr_block = cidrsubnet(module.vpc.vpc_cidr_block, 1, 1)
 }
 
 module "subnets" {
-  source              = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets?ref=tags/0.23.0"
+  source              = "git::https://github.com/cloudposse/terraform-aws-dynamic-subnets"
   namespace           = var.app
   name                = "subnet"
   vpc_id              = module.vpc.vpc_id
@@ -73,7 +72,7 @@ resource "aws_ec2_client_vpn_network_association" "vpn_subnets" {
 
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.vpn.id
   subnet_id              = module.subnets.private_subnet_ids[count.index]
-  # security_groups        = [aws_security_group.vpn_access.id]
+  security_groups        = [aws_security_group.vpn_access.id]
 
   lifecycle {
     ignore_changes = [subnet_id]
